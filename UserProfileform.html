@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Profile Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 400px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      background: #007bff;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .popup, .submitted-info {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      border: 2px solid #333;
+      box-shadow: 0 0 10px rgba(0,0,0,0.25);
+      z-index: 9999;
+      display: none;
+      border-radius: 10px;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
+      z-index: 9998;
+      display: none;
+    }
+
+    .popup button, .submitted-info button {
+      background: #333;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>User Profile Form</h2>
+  <form id="userForm">
+    <label>Full Name</label>
+    <input type="text" id="fullName">
+
+    <label>Email ID</label>
+    <input type="email" id="email">
+
+    <label>Phone Number</label>
+    <input type="tel" id="phone">
+
+    <label>Location</label>
+    <input type="text" id="location">
+
+    <label>Gender</label>
+    <select id="gender">
+      <option>Select your gender</option>
+      <option>Male</option>
+      <option>Female</option>
+      <option>Other</option>
+    </select>
+
+    <label>Department</label>
+    <input type="text" id="department">
+
+    <label>Employee ID</label>
+    <input type="text" id="employeeId">
+
+    <label>Project</label>
+    <input type="text" id="project">
+
+    <button type="submit">Submit</button>
+  </form>
+</div>
+
+<!-- Random popup -->
+<div class="overlay" id="overlay"></div>
+<div class="popup" id="popup">
+  <strong>⚠️ Testing interruption:</strong>
+  <p>This popup appears randomly.</p>
+  <button onclick="dismissPopup()">Dismiss</button>
+</div>
+
+<!-- Submitted info -->
+<div class="submitted-info" id="submittedInfo">
+  <h3>Submitted Info:</h3>
+  <p><strong>Name:</strong> <span id="sName"></span></p>
+  <p><strong>Email:</strong> <span id="sEmail"></span></p>
+  <p><strong>Phone:</strong> <span id="sPhone"></span></p>
+  <p><strong>Location:</strong> <span id="sLocation"></span></p>
+  <p><strong>Gender:</strong> <span id="sGender"></span></p>
+  <p><strong>Department:</strong> <span id="sDepartment"></span></p>
+  <p><strong>Employee ID:</strong> <span id="sEmployeeId"></span></p>
+  <p><strong>Project:</strong> <span id="sProject"></span></p>
+  <button onclick="closeSubmittedInfo()">Close</button>
+</div>
+
+<script>
+  const popup = document.getElementById('popup');
+  const overlay = document.getElementById('overlay');
+
+  // Show random popup between 5 to 15 seconds repeatedly
+  function showRandomPopup() {
+    const delay = Math.random() * 10000 + 5000;
+    setTimeout(() => {
+      popup.style.display = 'block';
+      overlay.style.display = 'block';
+      showRandomPopup(); // loop again
+    }, delay);
+  }
+
+  function dismissPopup() {
+    popup.style.display = 'none';
+    overlay.style.display = 'none';
+  }
+
+  showRandomPopup(); // Start the random popup loop
+
+  // Handle form submission
+  document.getElementById('userForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    document.getElementById('sName').innerText = document.getElementById('fullName').value;
+    document.getElementById('sEmail').innerText = document.getElementById('email').value;
+    document.getElementById('sPhone').innerText = document.getElementById('phone').value;
+    document.getElementById('sLocation').innerText = document.getElementById('location').value;
+    document.getElementById('sGender').innerText = document.getElementById('gender').value;
+    document.getElementById('sDepartment').innerText = document.getElementById('department').value;
+    document.getElementById('sEmployeeId').innerText = document.getElementById('employeeId').value;
+    document.getElementById('sProject').innerText = document.getElementById('project').value;
+
+    document.getElementById('submittedInfo').style.display = 'block';
+    overlay.style.display = 'block';
+  });
+
+  function closeSubmittedInfo() {
+    document.getElementById('submittedInfo').style.display = 'none';
+    overlay.style.display = 'none';
+  }
+</script>
+
+</body>
+</html>
