@@ -11,6 +11,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      overflow: auto;
     }
 
     .container {
@@ -88,13 +89,13 @@
   <h2>User Profile Form</h2>
   <form id="userForm">
     <label>Full Name</label>
-    <input type="text" id="fullName">
+    <input type="text" id="fullName" required>
 
     <label>Email ID</label>
-    <input type="email" id="email">
+    <input type="email" id="email" required>
 
     <label>Phone Number</label>
-    <input type="tel" id="phone">
+    <input type="tel" id="phone" required>
 
     <label>Location</label>
     <input type="text" id="location">
@@ -120,15 +121,15 @@
   </form>
 </div>
 
-<!-- Random popup -->
+<!-- Overlay and popup -->
 <div class="overlay" id="overlay"></div>
+
 <div class="popup" id="popup">
   <strong>⚠️ Testing interruption:</strong>
-  <p>This popup appears randomly.</p>
+  <p>This popup appears every 10 seconds.</p>
   <button onclick="dismissPopup()">Dismiss</button>
 </div>
 
-<!-- Submitted info -->
 <div class="submitted-info" id="submittedInfo">
   <h3>Submitted Info:</h3>
   <p><strong>Name:</strong> <span id="sName"></span></p>
@@ -143,46 +144,52 @@
 </div>
 
 <script>
-  const popup = document.getElementById('popup');
-  const overlay = document.getElementById('overlay');
+  // Wait until DOM is loaded
+  window.addEventListener('DOMContentLoaded', () => {
+    const popup = document.getElementById('popup');
+    const overlay = document.getElementById('overlay');
 
-  // Show random popup between 5 to 15 seconds repeatedly
-  function showRandomPopup() {
-    const delay = Math.random() * 10000 + 5000;
-    setTimeout(() => {
+    function showPopup() {
       popup.style.display = 'block';
       overlay.style.display = 'block';
-      showRandomPopup(); // loop again
-    }, delay);
-  }
+      document.body.style.overflow = 'hidden'; // Disable background scroll
+    }
 
-  function dismissPopup() {
-    popup.style.display = 'none';
-    overlay.style.display = 'none';
-  }
+    function dismissPopup() {
+      popup.style.display = 'none';
+      overlay.style.display = 'none';
+      document.body.style.overflow = ''; // Enable scroll
+    }
 
-  showRandomPopup(); // Start the random popup loop
+    window.dismissPopup = dismissPopup; // Expose to global for button onclick
 
-  // Handle form submission
-  document.getElementById('userForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    document.getElementById('sName').innerText = document.getElementById('fullName').value;
-    document.getElementById('sEmail').innerText = document.getElementById('email').value;
-    document.getElementById('sPhone').innerText = document.getElementById('phone').value;
-    document.getElementById('sLocation').innerText = document.getElementById('location').value;
-    document.getElementById('sGender').innerText = document.getElementById('gender').value;
-    document.getElementById('sDepartment').innerText = document.getElementById('department').value;
-    document.getElementById('sEmployeeId').innerText = document.getElementById('employeeId').value;
-    document.getElementById('sProject').innerText = document.getElementById('project').value;
+    // Show popup every 10 seconds
+    setInterval(showPopup, 10000);
 
-    document.getElementById('submittedInfo').style.display = 'block';
-    overlay.style.display = 'block';
+    // Handle form submission
+    document.getElementById('userForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      document.getElementById('sName').innerText = document.getElementById('fullName').value;
+      document.getElementById('sEmail').innerText = document.getElementById('email').value;
+      document.getElementById('sPhone').innerText = document.getElementById('phone').value;
+      document.getElementById('sLocation').innerText = document.getElementById('location').value;
+      document.getElementById('sGender').innerText = document.getElementById('gender').value;
+      document.getElementById('sDepartment').innerText = document.getElementById('department').value;
+      document.getElementById('sEmployeeId').innerText = document.getElementById('employeeId').value;
+      document.getElementById('sProject').innerText = document.getElementById('project').value;
+
+      document.getElementById('submittedInfo').style.display = 'block';
+      overlay.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    });
+
+    window.closeSubmittedInfo = function() {
+      document.getElementById('submittedInfo').style.display = 'none';
+      overlay.style.display = 'none';
+      document.body.style.overflow = '';
+    }
   });
-
-  function closeSubmittedInfo() {
-    document.getElementById('submittedInfo').style.display = 'none';
-    overlay.style.display = 'none';
-  }
 </script>
 
 </body>
